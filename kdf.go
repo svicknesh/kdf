@@ -18,9 +18,10 @@ const (
 
 // KDF - interface for different implementations of key derivation functions
 type KDF interface {
+	SetSalt(salt []byte)
 	Generate(input []byte)
 	Verify(input []byte) (ok bool)
-	Key() (hash []byte)
+	Key() (key []byte)
 	String() (str string)
 }
 

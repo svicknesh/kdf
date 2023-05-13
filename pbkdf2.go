@@ -79,9 +79,6 @@ func NewKDFPBKDF2(cfg ConfigPBKDF2) (p *KDFPBKDF2) {
 		kdfP.hFunc = sha3.New512
 	}
 
-	kdfP.Salt = make([]byte, kdfP.SaltLength)
-	rand.Read(kdfP.Salt)
-
 	return &kdfP
 }
 
@@ -131,8 +128,19 @@ func ParsePBKDF2(inputStr string) (p *KDFPBKDF2, err error) {
 	return
 }
 
+// SetSalt - sets a custom salt
+func (p *KDFPBKDF2) SetSalt(salt []byte) {
+	p.Salt = salt
+}
+
 // Generate - generates a input from the input
 func (p *KDFPBKDF2) Generate(input []byte) {
+	// if no salt is set, we generate a new one here
+	if len(p.Salt) == 0 {
+		p.Salt = make([]byte, p.SaltLength)
+		rand.Read(p.Salt)
+	}
+
 	p.h = pbkdf2.Key(input, p.Salt, p.Iterations, p.KeyLength, p.hFunc)
 }
 
@@ -143,7 +151,7 @@ func (p *KDFPBKDF2) Verify(input []byte) (ok bool) {
 }
 
 // Key - returns the computed hash
-func (p *KDFPBKDF2) Key() (hash []byte) {
+func (p *KDFPBKDF2) Key() (key []byte) {
 	return p.h
 }
 

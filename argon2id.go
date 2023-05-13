@@ -54,9 +54,6 @@ func NewKDFArgon2ID(cfg ConfigArgon2ID) (a *KDFArgon2ID) {
 		kdfA.KeyLength = 32
 	}
 
-	kdfA.Salt = make([]byte, kdfA.SaltLength)
-	rand.Read(kdfA.Salt)
-
 	return &kdfA
 }
 
@@ -101,8 +98,19 @@ func ParseArgon2ID(inputStr string) (a *KDFArgon2ID, err error) {
 	return
 }
 
+// SetSalt - sets a custom salt
+func (a *KDFArgon2ID) SetSalt(salt []byte) {
+	a.Salt = salt
+}
+
 // Generate - generates a input from the input
 func (a *KDFArgon2ID) Generate(input []byte) {
+	// if no salt is set, we generate a new one here
+	if len(a.Salt) == 0 {
+		a.Salt = make([]byte, a.SaltLength)
+		rand.Read(a.Salt)
+	}
+
 	a.h = argon2.IDKey([]byte(input), a.Salt, a.Iterations, a.Memory, a.Parallelism, a.KeyLength)
 }
 
@@ -113,7 +121,7 @@ func (a *KDFArgon2ID) Verify(input []byte) (ok bool) {
 }
 
 // Key - returns the computed hash
-func (a *KDFArgon2ID) Key() (hash []byte) {
+func (a *KDFArgon2ID) Key() (key []byte) {
 	return a.h
 }
 
