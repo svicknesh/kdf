@@ -25,19 +25,13 @@ type KDF interface {
 	String() (str string)
 }
 
-// Config - structure for configuring kdf
-type Config struct {
-	ConfigPBKDF2   ConfigPBKDF2
-	ConfigArgon2ID ConfigArgon2ID
-}
+func New[T *ConfigArgon2ID | *ConfigPBKDF2](cfg T) (k KDF, err error) {
 
-func New(t Type, cfg Config) (k KDF, err error) {
-
-	switch t {
-	case PBKDF2:
-		return NewKDFPBKDF2(cfg.ConfigPBKDF2), nil
-	case ARGON2ID:
-		return NewKDFArgon2ID(cfg.ConfigArgon2ID), nil
+	switch cfgType := any(cfg).(type) {
+	case *ConfigArgon2ID:
+		return NewKDFArgon2ID(cfgType), nil
+	case *ConfigPBKDF2:
+		return NewKDFPBKDF2(cfgType), nil
 	default:
 		err = fmt.Errorf("new: unknown kdf type given")
 	}

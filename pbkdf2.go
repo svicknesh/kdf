@@ -29,12 +29,13 @@ const typPBKDF2 = "pbkdf2"
 
 // KDFPBKDF2 - structure for pkbdf2 key derivation function
 type KDFPBKDF2 struct {
-	ConfigPBKDF2
+	*ConfigPBKDF2
 	h []byte
 }
 
 // ConfigPBKDF2 - configuration details for pbkdf2
 type ConfigPBKDF2 struct {
+	Type       Type
 	Iterations int
 	SaltLength uint32
 	KeyLength  int
@@ -43,8 +44,25 @@ type ConfigPBKDF2 struct {
 	Salt       []byte
 }
 
+// DefaultConfigPBKDF2 - returns default configuration for PBKDF2
+func DefaultConfigPBKDF2() (kdfP *ConfigPBKDF2) {
+	kdfP = new(ConfigPBKDF2)
+
+	kdfP.Type = PBKDF2
+	kdfP.Iterations = 300000
+	kdfP.SaltLength = 16
+	kdfP.KeyLength = 32
+	kdfP.HashFunc = SHA3384
+
+	return kdfP
+}
+
+func (pCfg *ConfigPBKDF2) Instance() (cfg any) {
+	return
+}
+
 // NewKDFPBKDF2 - creates a new instance of PBKDF2 using the given configuration parameters
-func NewKDFPBKDF2(cfg ConfigPBKDF2) (p *KDFPBKDF2) {
+func NewKDFPBKDF2(cfg *ConfigPBKDF2) (p *KDFPBKDF2) {
 
 	kdfP := KDFPBKDF2{ConfigPBKDF2: cfg}
 
@@ -92,6 +110,7 @@ func ParsePBKDF2(inputStr string) (p *KDFPBKDF2, err error) {
 	}
 
 	p = new(KDFPBKDF2)
+	p.ConfigPBKDF2 = new(ConfigPBKDF2)
 
 	var hashFunc string
 	_, err = fmt.Sscanf(i[2], "t=%d,s=%s", &p.Iterations, &hashFunc)

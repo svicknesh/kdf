@@ -8,9 +8,9 @@ import (
 	"github.com/svicknesh/kdf"
 )
 
-func TestArgon2ID(t *testing.T) {
+func TestArgon2IDDefault(t *testing.T) {
 
-	k, err := kdf.New(kdf.ARGON2ID, kdf.Config{})
+	k, err := kdf.New(kdf.DefaultConfigArgon2ID())
 	if nil != err {
 		fmt.Println(err)
 		os.Exit(1)
@@ -42,13 +42,14 @@ func TestArgon2ID(t *testing.T) {
 
 func TestArgon2IDCustom(t *testing.T) {
 
-	k, err := kdf.New(kdf.ARGON2ID, kdf.Config{ConfigArgon2ID: kdf.ConfigArgon2ID{
+	k, err := kdf.New(&kdf.ConfigArgon2ID{
 		Memory:      128 * 1024,
 		Iterations:  10,
 		Parallelism: 5,
 		SaltLength:  16,
 		KeyLength:   32,
-	}})
+	})
+
 	if nil != err {
 		fmt.Println(err)
 		os.Exit(1)
@@ -67,9 +68,9 @@ func TestArgon2IDCustom(t *testing.T) {
 
 }
 
-func TestPBKDF2(t *testing.T) {
+func TestPBKDF2Default(t *testing.T) {
 
-	k, err := kdf.New(kdf.PBKDF2, kdf.Config{})
+	k, err := kdf.New(kdf.DefaultConfigPBKDF2())
 	if nil != err {
 		fmt.Println(err)
 		os.Exit(1)
@@ -90,11 +91,12 @@ func TestPBKDF2(t *testing.T) {
 
 func TestPBKDF2Custom(t *testing.T) {
 
-	k, err := kdf.New(kdf.PBKDF2, kdf.Config{ConfigPBKDF2: kdf.ConfigPBKDF2{
+	k, err := kdf.New(&kdf.ConfigPBKDF2{
 		Iterations: 1000000,
 		SaltLength: 16,
 		KeyLength:  32,
-	}})
+	})
+
 	if nil != err {
 		fmt.Println(err)
 		os.Exit(1)

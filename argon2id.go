@@ -14,12 +14,13 @@ const typArgon = "argon2id"
 
 // KDFArgon2ID - structure for argon2id key derivation function
 type KDFArgon2ID struct {
-	ConfigArgon2ID
+	*ConfigArgon2ID
 	h []byte
 }
 
 // ConfigArgon2ID - configuration details for argon2id
 type ConfigArgon2ID struct {
+	Type        Type
 	Memory      uint32
 	Iterations  uint32
 	Parallelism uint8
@@ -28,8 +29,26 @@ type ConfigArgon2ID struct {
 	Salt        []byte
 }
 
+// DefaultConfigArgon2ID - returns default configuration for Argon2ID
+func DefaultConfigArgon2ID() (kdfA *ConfigArgon2ID) {
+	kdfA = new(ConfigArgon2ID)
+
+	kdfA.Type = ARGON2ID
+	kdfA.Memory = 64 * 1024
+	kdfA.Iterations = 3
+	kdfA.Parallelism = 4
+	kdfA.SaltLength = 16
+	kdfA.KeyLength = 32
+
+	return kdfA
+}
+
+func (aCfg *ConfigArgon2ID) Instance() (cfg any) {
+	return
+}
+
 // NewKDFArgon2ID - creates a new instance of Argon2ID using the given configuration parameters
-func NewKDFArgon2ID(cfg ConfigArgon2ID) (a *KDFArgon2ID) {
+func NewKDFArgon2ID(cfg *ConfigArgon2ID) (a *KDFArgon2ID) {
 
 	kdfA := KDFArgon2ID{ConfigArgon2ID: cfg}
 
@@ -77,6 +96,7 @@ func ParseArgon2ID(inputStr string) (a *KDFArgon2ID, err error) {
 	}
 
 	a = new(KDFArgon2ID)
+	a.ConfigArgon2ID = new(ConfigArgon2ID)
 
 	_, err = fmt.Sscanf(i[3], "m=%d,t=%d,p=%d", &a.Memory, &a.Iterations, &a.Parallelism)
 	if err != nil {
