@@ -141,9 +141,9 @@ func (a *KDFArgon2ID) Verify(input []byte) (ok bool) {
 	return (subtle.ConstantTimeCompare(a.h, h) == 1)
 }
 
-// Key - returns the computed hash
+// Key - returns the computed hash (the value without any of the parameters)
 func (a *KDFArgon2ID) Key() (key []byte) {
-	return 
+	return a.h
 }
 
 // String - returns an encoded representation of the derived key with the parameters used
