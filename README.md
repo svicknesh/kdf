@@ -10,7 +10,7 @@ if nil != err {
     os.Exit(1)
 }
 
-// the `k.SetSalt()` function lets the user set the desired salt to be used by `k,Generate`, instead of generating random bytes
+// the `k.SetSalt()` function lets the user set the desired salt to be used by `k.Generate`, instead of generating random bytes
 
 // generate key from given input
 k.Generate([]byte("hello, world!"))
@@ -77,7 +77,7 @@ if nil != err {
     os.Exit(1)
 }
 
-// the `k.SetSalt()` function lets the user set the desired salt to be used by `k,Generate`, instead of generating random bytes
+// the `k.SetSalt()` function lets the user set the desired salt to be used by `k.Generate`, instead of generating random bytes
 
 // generate key from given input
 k.Generate([]byte("hello, world!"))
