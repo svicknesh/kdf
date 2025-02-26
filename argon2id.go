@@ -121,6 +121,7 @@ func ParseArgon2ID(inputStr string) (a *KDFArgon2ID, err error) {
 // SetSalt - sets a custom salt
 func (a *KDFArgon2ID) SetSalt(salt []byte) {
 	a.Salt = salt
+	a.SaltLength = uint32(len(salt)) // store the length of the salt
 }
 
 // Generate - generates a input from the input
@@ -142,7 +143,7 @@ func (a *KDFArgon2ID) Verify(input []byte) (ok bool) {
 
 // Key - returns the computed hash
 func (a *KDFArgon2ID) Key() (key []byte) {
-	return a.h
+	return 
 }
 
 // String - returns an encoded representation of the derived key with the parameters used
