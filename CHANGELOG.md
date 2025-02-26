@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.2.1] - 2025-02-26 Vicknesh Suppramaniam
+
+### Modified
+- Fixed typo in `README.md`.
+- `SetSalt` - store the length of the given salt.
+
+
 ## [1.2.0] - 2024-02-08 Vicknesh Suppramaniam
 
 ### Modified

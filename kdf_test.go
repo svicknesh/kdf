@@ -16,6 +16,8 @@ func TestArgon2IDDefault(t *testing.T) {
 		os.Exit(1)
 	}
 
+	//k.SetSalt([]byte("what a wonderful world"))
+
 	k.Generate([]byte("hello, world!"))
 	fmt.Println(k)
 
@@ -25,6 +27,7 @@ func TestArgon2IDDefault(t *testing.T) {
 		os.Exit(1)
 	}
 	fmt.Println(k1)
+	fmt.Println(k1.Key())
 	fmt.Println(k1.Verify([]byte("hello, world!")))
 
 	/*
@@ -85,6 +88,7 @@ func TestPBKDF2Default(t *testing.T) {
 		os.Exit(1)
 	}
 	fmt.Println(k1)
+	//fmt.Println(k1.Key())
 	fmt.Println(k1.Verify([]byte("hello, world!")))
 
 }
